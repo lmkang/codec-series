@@ -1,13 +1,15 @@
+var prefix = 'http://localhost:9494/resources/m3u8/';
+var url = prefix + 'index.m3u8';
 var video = document.getElementById('player');
 var hls = new Hls();
-hls.loadSource('http://localhost:9494/m3u8/index.m3u8');
+hls.loadSource(url);
 hls.attachMedia(video);
 hls.on(Hls.Events.MEDIA_ATTACHED, function() {
     video.play();
 });
 
-httpGet('http://localhost:9494/m3u8/index.m3u8', 'text', function(content) {
-    console.log(parseM3U8('http://localhost:9494/m3u8/', content));
+httpGet(url, 'text', function(content) {
+    console.log(parseM3U8(prefix, content));
 });
 
 function parseM3U8(prefix, content) {
@@ -49,4 +51,4 @@ function httpGet(url, responseType, callback) {
         }
     };
     xhr.send();
-};
+}
