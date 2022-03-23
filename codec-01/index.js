@@ -4,9 +4,6 @@ var video = document.getElementById('player');
 var hls = new Hls();
 hls.loadSource(url);
 hls.attachMedia(video);
-hls.on(Hls.Events.MEDIA_ATTACHED, function() {
-    video.play();
-});
 
 httpGet(url, 'text', function(content) {
     console.log(parseM3U8(prefix, content));
@@ -16,8 +13,8 @@ function parseM3U8(prefix, content) {
     if(prefix == null) {
         prefix = '';
     }
-    var lines = content.split(/\r?\n|\r\n?/);
     var list = [];
+    var lines = content.split(/\r|\n|\r\n/);
     for(var i = 0; i < lines.length; i++) {
         if(lines[i].indexOf('#EXT-X-ENDLIST') === 0) {
             break;
@@ -37,7 +34,6 @@ function parseM3U8(prefix, content) {
 
 function httpGet(url, responseType, callback) {
     var xhr = new XMLHttpRequest();
-    xhr.open('get', url, true);
     xhr.responseType = responseType;
     xhr.onload = function () {
         if(xhr.status === 200) {
@@ -50,5 +46,6 @@ function httpGet(url, responseType, callback) {
             callback(null);
         }
     };
+    xhr.open('get', url, true);
     xhr.send();
 }
