@@ -1,13 +1,3 @@
-var url = 'http://localhost:9494/resources/m3u8/seg000.ts';
-
-httpGet(url, 'arraybuffer', function(res) {
-    var buf = new Uint8Array(res);
-    var tsdemuxer = new TSDemuxer();
-    tsdemuxer.demux(buf, function(data) {
-        console.log(data);
-    });
-});
-
 function TSDemuxer() {
     var probe = function(buf) {
         var offset = 0;
@@ -226,3 +216,13 @@ function httpGet(url, responseType, callback) {
     xhr.open('get', url, true);
     xhr.send();
 }
+
+var url = 'http://localhost:9494/resources/m3u8/seg000.ts';
+
+httpGet(url, 'arraybuffer', function(res) {
+    var buf = new Uint8Array(res);
+    var tsdemuxer = new TSDemuxer();
+    tsdemuxer.demux(buf, function(data) {
+        console.log(data);
+    });
+});

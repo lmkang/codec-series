@@ -1,14 +1,3 @@
-var prefix = 'http://localhost:9494/resources/m3u8/';
-var url = prefix + 'index.m3u8';
-var video = document.getElementById('player');
-var hls = new Hls();
-hls.loadSource(url);
-hls.attachMedia(video);
-
-httpGet(url, 'text', function(content) {
-    console.log(parseM3U8(prefix, content));
-});
-
 function parseM3U8(prefix, content) {
     if(prefix == null) {
         prefix = '';
@@ -49,3 +38,14 @@ function httpGet(url, responseType, callback) {
     xhr.open('get', url, true);
     xhr.send();
 }
+
+var prefix = 'http://localhost:9494/resources/m3u8/';
+var url = prefix + 'index.m3u8';
+var video = document.getElementById('player');
+var hls = new Hls();
+hls.loadSource(url);
+hls.attachMedia(video);
+
+httpGet(url, 'text', function(content) {
+    console.log(parseM3U8(prefix, content));
+});
