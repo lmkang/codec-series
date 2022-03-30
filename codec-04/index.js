@@ -1336,15 +1336,11 @@ function AudioRemuxer() {
         }
         var lastSample = outputSamples[outputSamples.length - 1];
         _nextAudioPts = nextAudioPts = lastPTS + scaleFactor * lastSample.duration;
-        track.samples = outputSamples;
         return {
-            moof: {
-                sequenceNumber: track.sequenceNumber++, 
-                baseMediaDecodeTime: firstPTS / scaleFactor
-            },
-            mdat: {
-                buf: mdat
-            }
+            sequenceNumber: track.sequenceNumber++, 
+            baseMediaDecodeTime: firstPTS / scaleFactor,
+            samples: outputSamples,
+            mdat: mdat
         };
     };
     
@@ -1454,12 +1450,13 @@ function playTSAudio(tsList, index, track) {
             audioBufs.push(moov);
         }
         var result = audioRemuxer.remux(track, 0);
+        track.samples = result.samples;
         var moof = fmp4.moof(
-            result.moof.sequenceNumber, 
-            result.moof.baseMediaDecodeTime, 
+            result.sequenceNumber, 
+            result.baseMediaDecodeTime, 
             track
         );
-        var mdat = fmp4.mdat(result.mdat.buf);
+        var mdat = fmp4.mdat(result.mdat);
         audioBufs.push(moof);
         audioBufs.push(mdat);
         playTSAudio(tsList, index + 1, track);
